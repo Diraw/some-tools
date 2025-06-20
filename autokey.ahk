@@ -32,7 +32,7 @@ Gui, Add, Button, gFindImages, 查找图像
 Gui, Add, Button, gStartAutomation, 开始自动化
 Gui, Add, Edit, vOutputText ReadOnly W400 H150, ; 用于显示输出的文本框
 Gui, Add, Text, cRed, 提示：按 Esc 键可随时退出自动化
-Gui, Add, Link, , <a href="https://github.com/Diraw/some-tools">源代码</a> ; 新增：可点击的链接
+Gui, Add, Button, gShowUpdates, 更新内容 ; 更新内容按钮
 Gui, Show, , 自动化数据输入
 
 ; 设置Esc键为退出自动化的热键
@@ -287,6 +287,35 @@ IsNumber(var)
     Return var is number
 }
 
-; 当GUI关闭时退出脚本
+; 显示更新内容的函数
+ShowUpdates:
+    ; 定义更新内容
+    UpdatesText =
+    (
+    更新日志
+    v1.1 - 2025年6月20日
+        - 支持通过Esc键随时终止自动化
+        - 修复在输入0或0.几时报错的bug
+
+    v1.0 - 2025年5月5日
+        - 初始版本发布
+        - 支持指定起始值、结束值和步长进行自动化数据输入
+        - 自动查找并激活目标窗口
+    )
+
+    ; 创建新的GUI窗口来显示更新内容
+    Gui, 2:New ; 使用第二个GUI实例
+    Gui, 2:Add, Edit, ReadOnly W450 H250 VUpdatesOutput, %UpdatesText%
+    Gui, 2:Add, Link, , <a href="https://github.com/Diraw/some-tools">源代码</a> ; 可点击的链接
+    Gui, 2:Show, , 更新内容
+Return
+
+; 关闭更新内容GUI的函数
+2GuiClose:
+    Gui, 2:Destroy ; 销毁第二个GUI实例
+Return
+
+
+; 当主GUI关闭时退出脚本
 GuiClose:
     ExitApp
